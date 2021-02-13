@@ -6,4 +6,8 @@
     <RootNamespace>my_fsm</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Stateless" Version="5.1.8" />
+  </ItemGroup>
+
 </Project>
