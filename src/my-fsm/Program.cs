@@ -7,14 +7,24 @@ namespace my_fsm
 
         static void Main(string[] args)
         {
-            var turnstile = new Turnstile();
+            var ro = new RepairOrder();
     
-            turnstile.AddCoin();
-            turnstile.AddCoin();
-            turnstile.Push();
-            turnstile.Push();
-            turnstile.AddCoin();
-            turnstile.Push();
+            ro.GoToNextRoMode();
+            ro.GoToNextRoMode();
+            ro.GoToNextRoMode();
+            ro.GoToNextRoMode();
+            ro.GoToNextRoMode();
+            ro.GoToNextRoMode();
+            ro.GoToNextRoMode();
+            ro.GoToNextRoMode();
+            
+            Console.WriteLine("-----------");
+            
+            ro.GoToNextPartStatus();
+            ro.GoToNextPartStatus();
+            ro.GoToNextPartStatus();
+            ro.GoToNextPartStatus();
+            ro.GoToNextPartStatus();
 
             Console.WriteLine("-----------");
         }
