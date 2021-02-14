@@ -1,5 +1,4 @@
 ﻿using System;
-using Stateless;
 
 namespace my_fsm
 {
@@ -8,58 +7,16 @@ namespace my_fsm
 
         static void Main(string[] args)
         {
-            var sm = new StateMachine<State, Trigger>(State.Locked);
-            SetUp(sm);
+            var turnstile = new Turnstile();
     
-            Console.WriteLine($"{sm.State}");
-
-            Console.Write($"AddCoin -> ");
-            sm.Fire(Trigger.AddCoin);
-            Console.WriteLine($"{sm.State}");
-
-            Console.Write($"AddCoin -> ");
-            sm.Fire(Trigger.AddCoin);
-            Console.WriteLine($"{sm.State}");
-
-            Console.Write($"Push -> ");
-            sm.Fire(Trigger.Push);
-            Console.WriteLine($"{sm.State}");
-
-            Console.Write($"Push -> ");
-            sm.Fire(Trigger.Push);
-            Console.WriteLine($"{sm.State}");
-
-            Console.Write($"AddCoin -> ");
-            sm.Fire(Trigger.AddCoin);
-            Console.WriteLine($"{sm.State}");
-
-            Console.Write($"Push -> ");
-            sm.Fire(Trigger.Push);
-            Console.WriteLine($"{sm.State}");
+            turnstile.AddCoin();
+            turnstile.AddCoin();
+            turnstile.Push();
+            turnstile.Push();
+            turnstile.AddCoin();
+            turnstile.Push();
 
             Console.WriteLine("-----------");
         }
-
-        static void SetUp(StateMachine<State, Trigger> machine)
-        {
-            machine.Configure(State.Locked)
-                .Ignore(Trigger.Push)
-                .Permit(Trigger.AddCoin, State.Unlocked);
-
-            machine.Configure(State.Unlocked)
-                .Ignore(Trigger.AddCoin)
-                .Permit(Trigger.Push, State.Locked);
-        }
-    }
-
-    public enum State
-    {
-        Locked,
-        Unlocked
-    }
-    public enum Trigger
-    {
-        AddCoin,
-        Push
     }
 }
