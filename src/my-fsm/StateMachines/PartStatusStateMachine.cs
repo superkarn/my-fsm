@@ -3,7 +3,7 @@ using Stateless;
 
 namespace my_fsm.StateMachines
 {
-    public class PartStatusStateMachine
+    public class PartStatusStateMachine : BaseStateMachine<PartStatusStateMachine.State, PartStatusStateMachine.Trigger>
     {
         public enum State
         {
@@ -21,52 +21,57 @@ namespace my_fsm.StateMachines
             SendToDefault,
         }
 
-        StateMachine<State, Trigger> _StateMachine { get; set; }
+        public PartStatusStateMachine() 
+            : base(State.Default)
+        { }
+        
+        public PartStatusStateMachine(State initialState) 
+            : base(initialState)
+        { }
 
-        public PartStatusStateMachine(State initialState = State.Default)
+        public override void SetUp()
         {
-            this._StateMachine = new StateMachine<State, Trigger>(initialState);
-            Console.WriteLine($"Initializing to -> {this._StateMachine.State}");
-            this.SetUp();
-        }
-
-        void SetUp()
-        {
-            this._StateMachine.Configure(State.Default)
-                .Permit(Trigger.SendToWaiting, State.Waiting);
+            this.StateMachine.Configure(State.Default)
+                .Permit(Trigger.SendToWaiting, State.Waiting)
+                .OnEntry(() => this.BroadcastStateEntry())
+                .OnExit(() => this.BroadcastStateExit());
                 
-            this._StateMachine.Configure(State.Waiting)
-                .Permit(Trigger.SendToWorking, State.Working);
+            this.StateMachine.Configure(State.Waiting)
+                .Permit(Trigger.SendToWorking, State.Working)
+                .OnEntry(() => this.BroadcastStateEntry())
+                .OnExit(() => this.BroadcastStateExit());
                 
-            this._StateMachine.Configure(State.Working)
-                .Permit(Trigger.SendToViewed, State.Viewed);
+            this.StateMachine.Configure(State.Working)
+                .Permit(Trigger.SendToViewed, State.Viewed)
+                .OnEntry(() => this.BroadcastStateEntry())
+                .OnExit(() => this.BroadcastStateExit());
                 
-            this._StateMachine.Configure(State.Viewed)
-                .Permit(Trigger.SendToDefault, State.Default);
+            this.StateMachine.Configure(State.Viewed)
+                .Permit(Trigger.SendToDefault, State.Default)
+                .OnEntry(() => this.BroadcastStateEntry())
+                .OnExit(() => this.BroadcastStateExit());
         }
 
         public void GoToNextState()
         {
-            switch(this._StateMachine.State)
+            switch(this.StateMachine.State)
             {
                 case State.Default:
-                    this._StateMachine.Fire(Trigger.SendToWaiting);
+                    this.StateMachine.Fire(Trigger.SendToWaiting);
                     break;
 
                 case State.Waiting:
-                    this._StateMachine.Fire(Trigger.SendToWorking);
+                    this.StateMachine.Fire(Trigger.SendToWorking);
                     break;
 
                 case State.Working:
-                    this._StateMachine.Fire(Trigger.SendToViewed);
+                    this.StateMachine.Fire(Trigger.SendToViewed);
                     break;
 
                 case State.Viewed:
-                    this._StateMachine.Fire(Trigger.SendToDefault);
+                    this.StateMachine.Fire(Trigger.SendToDefault);
                     break;
             }
-            
-            Console.WriteLine($"PartStatus -> {this._StateMachine.State}");
         }
     }
 }
