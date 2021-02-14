@@ -1,4 +1,5 @@
 ﻿using System;
+using my_fsm.Models;
 
 namespace my_fsm
 {
@@ -11,20 +12,19 @@ namespace my_fsm
     
             ro.GoToNextRoMode();
             ro.GoToNextRoMode();
-            ro.GoToNextRoMode();
-            ro.GoToNextRoMode();
-            ro.GoToNextRoMode();
-            ro.GoToNextRoMode();
-            ro.GoToNextRoMode();
-            ro.GoToNextRoMode();
-            
+            ro.Close();
+
             Console.WriteLine("-----------");
             
             ro.GoToNextPartStatus();
-            ro.GoToNextPartStatus();
-            ro.GoToNextPartStatus();
-            ro.GoToNextPartStatus();
-            ro.GoToNextPartStatus();
+
+            Console.WriteLine("-----------");
+
+            var line = new RepairOrderLine();
+            ro.AddLine(line);
+            line.Update();
+            line.Update();
+            line.Writeback();
 
             Console.WriteLine("-----------");
         }
