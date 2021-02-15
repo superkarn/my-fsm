@@ -21,12 +21,10 @@ namespace my_fsm.StateMachines
             SendToDefault,
         }
 
-        public PartStatusStateMachine() 
-            : base(State.Default)
+        public PartStatusStateMachine() : base(State.Default)
         { }
         
-        public PartStatusStateMachine(State initialState) 
-            : base(initialState)
+        public PartStatusStateMachine(State initialState) : base(initialState)
         { }
 
         public override void SetUp()
@@ -50,28 +48,6 @@ namespace my_fsm.StateMachines
                 .Permit(Trigger.SendToDefault, State.Default)
                 .OnEntry(() => this.BroadcastStateEntry())
                 .OnExit(() => this.BroadcastStateExit());
-        }
-
-        public void GoToNextState()
-        {
-            switch(this.StateMachine.State)
-            {
-                case State.Default:
-                    this.StateMachine.Fire(Trigger.SendToWaiting);
-                    break;
-
-                case State.Waiting:
-                    this.StateMachine.Fire(Trigger.SendToWorking);
-                    break;
-
-                case State.Working:
-                    this.StateMachine.Fire(Trigger.SendToViewed);
-                    break;
-
-                case State.Viewed:
-                    this.StateMachine.Fire(Trigger.SendToDefault);
-                    break;
-            }
         }
     }
 }

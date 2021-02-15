@@ -17,6 +17,7 @@ namespace my_fsm
             Console.WriteLine("-----------");
             
             ro.GoToNextPartStatus();
+            ro.GoToNextPartStatus();
 
             Console.WriteLine("-----------");
 

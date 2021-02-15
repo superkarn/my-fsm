@@ -17,36 +17,54 @@ namespace my_fsm.StateMachines
             Push
         }
 
-        StateMachine<State, Trigger> _StateMachine { get; set; }
+        public StateMachine<State, Trigger> StateMachine { get; set; }
 
         public TurnstileStatemachine(State initialState = State.Locked)
         {
-            this._StateMachine = new StateMachine<State, Trigger>(initialState);
-            Console.WriteLine($"Initializing to -> {this._StateMachine.State}");
+            this.StateMachine = new StateMachine<State, Trigger>(initialState);
+            Console.WriteLine($"Initializing to -> {this.StateMachine.State}");
             this.SetUp();
         }
 
-        void SetUp()
+        private void SetUp()
         {
-            this._StateMachine.Configure(State.Locked)
+            this.StateMachine.Configure(State.Locked)
                 .Ignore(Trigger.Push)
-                .Permit(Trigger.AddCoin, State.Unlocked);
+                .Permit(Trigger.AddCoin, State.Unlocked)
+                .OnEntry(() => this.BroadcastStateEntry())
+                .OnExit(() => this.BroadcastStateExit());
 
-            this._StateMachine.Configure(State.Unlocked)
+            this.StateMachine.Configure(State.Unlocked)
                 .Ignore(Trigger.AddCoin)
-                .Permit(Trigger.Push, State.Locked);
+                .Permit(Trigger.Push, State.Locked)
+                .OnEntry(() => this.BroadcastStateEntry())
+                .OnExit(() => this.BroadcastStateExit());
+        }
+            
+        internal void BroadcastStateEntry()
+        {
+            Console.WriteLine($"  Broadcasting EnteringState -> {this.StateMachine.State}");
+        }
+        
+        internal void BroadcastStateExit()
+        {
+            Console.WriteLine($"  Broadcasting ExitingState  -> {this.StateMachine.State}");
         }
 
         public void AddCoin()
         {
-            this._StateMachine.Fire(Trigger.AddCoin);
-            Console.WriteLine($"Turnstile -> {this._StateMachine.State}");
+            // Add a coin
+
+            // Then update the state
+            this.StateMachine.Fire(Trigger.AddCoin);
         }
 
         public void Push()
         {
-            this._StateMachine.Fire(Trigger.Push);
-            Console.WriteLine($"Turnstile -> {this._StateMachine.State}");
+            // Push the gate
+
+            // Then update the state
+            this.StateMachine.Fire(Trigger.Push);
         }
     }
 }

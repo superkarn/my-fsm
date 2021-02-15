@@ -3,7 +3,7 @@ using Stateless;
 
 namespace my_fsm.StateMachines
 {
-    public class WritebackStateMachine : BaseStateMachine<WritebackStateMachine.State, WritebackStateMachine.Trigger>
+    public class DmsSyncStateMachine : BaseStateMachine<DmsSyncStateMachine.State, DmsSyncStateMachine.Trigger>
     {
         public enum State
         {
@@ -17,12 +17,10 @@ namespace my_fsm.StateMachines
             SendToUnsynced,
         }
 
-        public WritebackStateMachine() 
-            : base(State.Synced)
+        public DmsSyncStateMachine() : base(State.Synced)
         { }
         
-        public WritebackStateMachine(State initialState) 
-            : base(initialState)
+        public DmsSyncStateMachine(State initialState) : base(initialState)
         { }
 
         public override void SetUp()

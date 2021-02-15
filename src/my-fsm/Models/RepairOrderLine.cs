@@ -4,28 +4,28 @@ namespace my_fsm.Models
 {
     public class RepairOrderLine
     {
-        WritebackStateMachine _writebackStateMachine { get; set; }
+        DmsSyncStateMachine _dmsSyncStateMachine { get; set; }
 
         public RepairOrderLine(
-            WritebackStateMachine.State initialWritebackState = WritebackStateMachine.State.Unsynced)
+            DmsSyncStateMachine.State initialWritebackState = DmsSyncStateMachine.State.Unsynced)
         {
-            this._writebackStateMachine = new WritebackStateMachine(initialWritebackState);
+            this._dmsSyncStateMachine = new DmsSyncStateMachine(initialWritebackState);
         }
 
         public void Update()
         {
             // Update the line
 
-            // Then update the writeback state
-            this._writebackStateMachine.StateMachine.Fire(WritebackStateMachine.Trigger.SendToUnsynced);
+            // Then update the DmsSync state
+            this._dmsSyncStateMachine.StateMachine.Fire(DmsSyncStateMachine.Trigger.SendToUnsynced);
         }
 
         public void Writeback()
         {
             // Write the line back
 
-            // Then update the writeback state
-            this._writebackStateMachine.StateMachine.Fire(WritebackStateMachine.Trigger.SendToSynced);
+            // Then update the DmsSync state
+            this._dmsSyncStateMachine.StateMachine.Fire(DmsSyncStateMachine.Trigger.SendToSynced);
         }
     }
 }

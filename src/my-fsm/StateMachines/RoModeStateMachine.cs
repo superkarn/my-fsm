@@ -3,7 +3,7 @@ using Stateless;
 
 namespace my_fsm.StateMachines
 {
-    public class RoModeStateMachine
+    public class RoModeStateMachine : BaseStateMachine<RoModeStateMachine.State, RoModeStateMachine.Trigger>
     {
         public enum State
         {
@@ -25,66 +25,48 @@ namespace my_fsm.StateMachines
             SendToClosed,
         }
 
-        StateMachine<State, Trigger> _StateMachine { get; set; }
+        public RoModeStateMachine() : base(State.Dispatch)
+        { }
+        
+        public RoModeStateMachine(State initialState) : base(initialState)
+        { }
 
-        public RoModeStateMachine(State initialState = State.Dispatch)
+        public override void SetUp()
         {
-            this._StateMachine = new StateMachine<State, Trigger>(initialState);
-            Console.WriteLine($"Initializing to -> {this._StateMachine.State}");
-            this.SetUp();
-        }
-
-        void SetUp()
-        {
-            this._StateMachine.Configure(State.Dispatch)
-                .Permit(Trigger.SendToInspection, State.Inspection);
+            // TODO complete the state transitions
+            this.StateMachine.Configure(State.Dispatch)
+                .Permit(Trigger.SendToInspection, State.Inspection)
+                .Permit(Trigger.SendToClosed, State.Closed)
+                .OnEntry(() => this.BroadcastStateEntry())
+                .OnExit(() => this.BroadcastStateExit());
                 
-            this._StateMachine.Configure(State.Inspection)
-                .Permit(Trigger.SendToPendingApproval, State.PendingApproval);
+            this.StateMachine.Configure(State.Inspection)
+                .Permit(Trigger.SendToPendingApproval, State.PendingApproval)
+                .Permit(Trigger.SendToClosed, State.Closed)
+                .OnEntry(() => this.BroadcastStateEntry())
+                .OnExit(() => this.BroadcastStateExit());
                 
-            this._StateMachine.Configure(State.PendingApproval)
-                .Permit(Trigger.SendToRepair, State.Repair);
+            this.StateMachine.Configure(State.PendingApproval)
+                .Permit(Trigger.SendToRepair, State.Repair)
+                .Permit(Trigger.SendToClosed, State.Closed)
+                .OnEntry(() => this.BroadcastStateEntry())
+                .OnExit(() => this.BroadcastStateExit());
                 
-            this._StateMachine.Configure(State.Repair)
-                .Permit(Trigger.SendToReview, State.Review);
+            this.StateMachine.Configure(State.Repair)
+                .Permit(Trigger.SendToReview, State.Review)
+                .Permit(Trigger.SendToClosed, State.Closed)
+                .OnEntry(() => this.BroadcastStateEntry())
+                .OnExit(() => this.BroadcastStateExit());
                 
-            this._StateMachine.Configure(State.Review)
-                .Permit(Trigger.SendToClosed, State.Closed);
+            this.StateMachine.Configure(State.Review)
+                .Permit(Trigger.SendToClosed, State.Closed)
+                .OnEntry(() => this.BroadcastStateEntry())
+                .OnExit(() => this.BroadcastStateExit());
                 
-            this._StateMachine.Configure(State.Closed)
-                .Permit(Trigger.SendToDispatch, State.Dispatch);
-        }
-
-        public void GoToNextState()
-        {
-            switch(this._StateMachine.State)
-            {
-                case State.Dispatch:
-                    this._StateMachine.Fire(Trigger.SendToInspection);
-                    break;
-
-                case State.Inspection:
-                    this._StateMachine.Fire(Trigger.SendToPendingApproval);
-                    break;
-
-                case State.PendingApproval:
-                    this._StateMachine.Fire(Trigger.SendToRepair);
-                    break;
-
-                case State.Repair:
-                    this._StateMachine.Fire(Trigger.SendToReview);
-                    break;
-
-                case State.Review:
-                    this._StateMachine.Fire(Trigger.SendToClosed);
-                    break;
-
-                case State.Closed:
-                    this._StateMachine.Fire(Trigger.SendToDispatch);
-                    break;
-            }
-
-            Console.WriteLine($"RoMode -> {this._StateMachine.State}");
+            this.StateMachine.Configure(State.Closed)
+                .Permit(Trigger.SendToDispatch, State.Dispatch)
+                .OnEntry(() => this.BroadcastStateEntry())
+                .OnExit(() => this.BroadcastStateExit());
         }
     }
 }
