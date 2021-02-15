@@ -17,7 +17,7 @@ namespace my_fsm.Models
             // Update the line
 
             // Then update the DmsSync state
-            this._dmsSyncStateMachine.StateMachine.Fire(DmsSyncStateMachine.Trigger.SendToUnsynced);
+            this._dmsSyncStateMachine.StateMachine.Fire(DmsSyncStateMachine.Trigger.SetToUnsynced);
         }
 
         public void Writeback()
@@ -25,7 +25,7 @@ namespace my_fsm.Models
             // Write the line back
 
             // Then update the DmsSync state
-            this._dmsSyncStateMachine.StateMachine.Fire(DmsSyncStateMachine.Trigger.SendToSynced);
+            this._dmsSyncStateMachine.StateMachine.Fire(DmsSyncStateMachine.Trigger.SetToSynced);
         }
     }
 }

@@ -25,27 +25,27 @@ namespace my_fsm.Models
             switch(this._roModeStateMachine.StateMachine.State)
             {
                 case RoModeStateMachine.State.Dispatch:
-                    this._roModeStateMachine.StateMachine.Fire(RoModeStateMachine.Trigger.SendToInspection);
+                    this._roModeStateMachine.StateMachine.Fire(RoModeStateMachine.Trigger.SetToInspection);
                     break;
 
                 case RoModeStateMachine.State.Inspection:
-                    this._roModeStateMachine.StateMachine.Fire(RoModeStateMachine.Trigger.SendToPendingApproval);
+                    this._roModeStateMachine.StateMachine.Fire(RoModeStateMachine.Trigger.SetToPendingApproval);
                     break;
 
                 case RoModeStateMachine.State.PendingApproval:
-                    this._roModeStateMachine.StateMachine.Fire(RoModeStateMachine.Trigger.SendToRepair);
+                    this._roModeStateMachine.StateMachine.Fire(RoModeStateMachine.Trigger.SetToRepair);
                     break;
 
                 case RoModeStateMachine.State.Repair:
-                    this._roModeStateMachine.StateMachine.Fire(RoModeStateMachine.Trigger.SendToReview);
+                    this._roModeStateMachine.StateMachine.Fire(RoModeStateMachine.Trigger.SetToReview);
                     break;
 
                 case RoModeStateMachine.State.Review:
-                    this._roModeStateMachine.StateMachine.Fire(RoModeStateMachine.Trigger.SendToClosed);
+                    this._roModeStateMachine.StateMachine.Fire(RoModeStateMachine.Trigger.SetToClosed);
                     break;
 
                 case RoModeStateMachine.State.Closed:
-                    this._roModeStateMachine.StateMachine.Fire(RoModeStateMachine.Trigger.SendToDispatch);
+                    this._roModeStateMachine.StateMachine.Fire(RoModeStateMachine.Trigger.SetToDispatch);
                     break;
             }
         }
@@ -55,26 +55,26 @@ namespace my_fsm.Models
             switch(this._partStatusStateMachine.StateMachine.State)
             {
                 case PartStatusStateMachine.State.Default:
-                    this._partStatusStateMachine.StateMachine.Fire(PartStatusStateMachine.Trigger.SendToWaiting);
+                    this._partStatusStateMachine.StateMachine.Fire(PartStatusStateMachine.Trigger.SetToWaiting);
                     break;
 
                 case PartStatusStateMachine.State.Waiting:
-                    this._partStatusStateMachine.StateMachine.Fire(PartStatusStateMachine.Trigger.SendToWorking);
+                    this._partStatusStateMachine.StateMachine.Fire(PartStatusStateMachine.Trigger.SetToWorking);
                     break;
 
                 case PartStatusStateMachine.State.Working:
-                    this._partStatusStateMachine.StateMachine.Fire(PartStatusStateMachine.Trigger.SendToViewed);
+                    this._partStatusStateMachine.StateMachine.Fire(PartStatusStateMachine.Trigger.SetToViewed);
                     break;
 
                 case PartStatusStateMachine.State.Viewed:
-                    this._partStatusStateMachine.StateMachine.Fire(PartStatusStateMachine.Trigger.SendToDefault);
+                    this._partStatusStateMachine.StateMachine.Fire(PartStatusStateMachine.Trigger.SetToDefault);
                     break;
             }
         }
 
         public void Close()
         {
-            this._roModeStateMachine.StateMachine.Fire(RoModeStateMachine.Trigger.SendToClosed);
+            this._roModeStateMachine.StateMachine.Fire(RoModeStateMachine.Trigger.SetToClosed);
         }
 
         public void AddLine(RepairOrderLine line)

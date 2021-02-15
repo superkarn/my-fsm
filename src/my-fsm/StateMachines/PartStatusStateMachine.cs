@@ -15,10 +15,10 @@ namespace my_fsm.StateMachines
 
         public enum Trigger
         {
-            SendToWaiting,
-            SendToWorking,
-            SendToViewed,
-            SendToDefault,
+            SetToWaiting,
+            SetToWorking,
+            SetToViewed,
+            SetToDefault,
         }
 
         public PartStatusStateMachine() : base(State.Default)
@@ -30,22 +30,22 @@ namespace my_fsm.StateMachines
         public override void SetUp()
         {
             this.StateMachine.Configure(State.Default)
-                .Permit(Trigger.SendToWaiting, State.Waiting)
+                .Permit(Trigger.SetToWaiting, State.Waiting)
                 .OnEntry(() => this.BroadcastStateEntry())
                 .OnExit(() => this.BroadcastStateExit());
                 
             this.StateMachine.Configure(State.Waiting)
-                .Permit(Trigger.SendToWorking, State.Working)
+                .Permit(Trigger.SetToWorking, State.Working)
                 .OnEntry(() => this.BroadcastStateEntry())
                 .OnExit(() => this.BroadcastStateExit());
                 
             this.StateMachine.Configure(State.Working)
-                .Permit(Trigger.SendToViewed, State.Viewed)
+                .Permit(Trigger.SetToViewed, State.Viewed)
                 .OnEntry(() => this.BroadcastStateEntry())
                 .OnExit(() => this.BroadcastStateExit());
                 
             this.StateMachine.Configure(State.Viewed)
-                .Permit(Trigger.SendToDefault, State.Default)
+                .Permit(Trigger.SetToDefault, State.Default)
                 .OnEntry(() => this.BroadcastStateEntry())
                 .OnExit(() => this.BroadcastStateExit());
         }

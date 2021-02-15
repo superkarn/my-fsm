@@ -17,12 +17,12 @@ namespace my_fsm.StateMachines
 
         public enum Trigger
         {
-            SendToDispatch,
-            SendToInspection,
-            SendToPendingApproval,
-            SendToRepair,
-            SendToReview,
-            SendToClosed,
+            SetToDispatch,
+            SetToInspection,
+            SetToPendingApproval,
+            SetToRepair,
+            SetToReview,
+            SetToClosed,
         }
 
         public RoModeStateMachine() : base(State.Dispatch)
@@ -35,36 +35,36 @@ namespace my_fsm.StateMachines
         {
             // TODO complete the state transitions
             this.StateMachine.Configure(State.Dispatch)
-                .Permit(Trigger.SendToInspection, State.Inspection)
-                .Permit(Trigger.SendToClosed, State.Closed)
+                .Permit(Trigger.SetToInspection, State.Inspection)
+                .Permit(Trigger.SetToClosed, State.Closed)
                 .OnEntry(() => this.BroadcastStateEntry())
                 .OnExit(() => this.BroadcastStateExit());
                 
             this.StateMachine.Configure(State.Inspection)
-                .Permit(Trigger.SendToPendingApproval, State.PendingApproval)
-                .Permit(Trigger.SendToClosed, State.Closed)
+                .Permit(Trigger.SetToPendingApproval, State.PendingApproval)
+                .Permit(Trigger.SetToClosed, State.Closed)
                 .OnEntry(() => this.BroadcastStateEntry())
                 .OnExit(() => this.BroadcastStateExit());
                 
             this.StateMachine.Configure(State.PendingApproval)
-                .Permit(Trigger.SendToRepair, State.Repair)
-                .Permit(Trigger.SendToClosed, State.Closed)
+                .Permit(Trigger.SetToRepair, State.Repair)
+                .Permit(Trigger.SetToClosed, State.Closed)
                 .OnEntry(() => this.BroadcastStateEntry())
                 .OnExit(() => this.BroadcastStateExit());
                 
             this.StateMachine.Configure(State.Repair)
-                .Permit(Trigger.SendToReview, State.Review)
-                .Permit(Trigger.SendToClosed, State.Closed)
+                .Permit(Trigger.SetToReview, State.Review)
+                .Permit(Trigger.SetToClosed, State.Closed)
                 .OnEntry(() => this.BroadcastStateEntry())
                 .OnExit(() => this.BroadcastStateExit());
                 
             this.StateMachine.Configure(State.Review)
-                .Permit(Trigger.SendToClosed, State.Closed)
+                .Permit(Trigger.SetToClosed, State.Closed)
                 .OnEntry(() => this.BroadcastStateEntry())
                 .OnExit(() => this.BroadcastStateExit());
                 
             this.StateMachine.Configure(State.Closed)
-                .Permit(Trigger.SendToDispatch, State.Dispatch)
+                .Permit(Trigger.SetToDispatch, State.Dispatch)
                 .OnEntry(() => this.BroadcastStateEntry())
                 .OnExit(() => this.BroadcastStateExit());
         }
